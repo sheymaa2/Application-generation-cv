@@ -1,0 +1,9 @@
+# Fichiers privés
+partie2/.env
+partie1/etudiants.txt
+
+# Fichiers uploadés (on garde les dossiers vides)
+partie1/uploads/*
+!partie1/uploads/.gitkeep
+partie2/uploads/photos/*
+!partie2/uploads/photos/.gitkeep
