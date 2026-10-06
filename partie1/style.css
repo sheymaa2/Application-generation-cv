@@ -1,0 +1,425 @@
+/* style.css : design de la Fiche de Renseignements */
+
+
+:root {
+    --couleur-principale: #2563eb;
+    --couleur-principale-fonce: #1d4ed8;
+    --couleur-fond: #f1f5f9;
+    --couleur-carte: #ffffff;
+    --couleur-texte: #1e293b;
+    --couleur-texte-doux: #64748b;
+    --couleur-bordure: #cbd5e1;
+    --rayon: 10px;
+}
+
+/* ---------- Base ---------- */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 30px 16px;
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--couleur-fond);
+    color: var(--couleur-texte);
+    line-height: 1.5;
+}
+
+.conteneur {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    margin: 0 0 30px;
+    font-size: 2rem;
+    color: var(--couleur-principale-fonce);
+}
+
+/* ---------- Grille des blocs (disposition de la fiche de l'énoncé) ---------- */
+.grille {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    grid-template-areas:
+        "academique personnel"
+        "academique remarques"
+        "projets    projets"
+        "interets   competences";
+    gap: 24px;
+}
+
+.bloc-academique  { grid-area: academique; }
+.bloc-personnel   { grid-area: personnel; }
+.bloc-remarques   { grid-area: remarques; }
+.bloc-projets     { grid-area: projets; }
+.bloc-interets    { grid-area: interets; }
+.bloc-competences { grid-area: competences; }
+
+/* ---------- Blocs (fieldset) ---------- */
+.bloc {
+    margin: 0;
+    min-width: 0;               /* évite que le fieldset déborde sur mobile */
+    padding: 20px 22px 22px;
+    background: var(--couleur-carte);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon);
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+}
+
+.bloc legend {
+    padding: 4px 14px;
+    font-weight: 600;
+    color: #ffffff;
+    background: var(--couleur-principale);
+    border-radius: 20px;
+}
+
+/* ---------- Champs ---------- */
+.champ {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.champ label {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* Variante : label et champ sur la même ligne */
+.champ-ligne {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.titre-champ {
+    margin: 16px 0 8px;
+    font-weight: 600;
+}
+
+.bloc .titre-champ:first-of-type {
+    margin-top: 0;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="tel"],
+input[type="email"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    font: inherit;
+    font-weight: 400;
+    color: var(--couleur-texte);
+    background: #f8fafc;
+    border: 1px solid var(--couleur-bordure);
+    border-radius: 8px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.champ-ligne select {
+    width: auto;
+    min-width: 80px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* Champ sélectionné */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--couleur-principale);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    background: #ffffff;
+}
+
+input[type="file"] {
+    font: inherit;
+    font-size: 0.9rem;
+}
+
+/* ---------- Boutons radio et cases à cocher ---------- */
+.choix {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.choix label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 0.92rem;
+    background: #f8fafc;
+    border: 1px solid var(--couleur-bordure);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.choix label:hover {
+    border-color: var(--couleur-principale);
+    background: #eff6ff;
+}
+
+.choix input {
+    accent-color: var(--couleur-principale);
+    margin: 0;
+}
+
+/* ---------- Projets et stages ---------- */
+.projet {
+    margin-bottom: 16px;
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px dashed var(--couleur-bordure);
+    border-radius: 8px;
+}
+
+.projet-titre {
+    margin: 0 0 12px;
+    font-weight: 700;
+    color: var(--couleur-principale-fonce);
+}
+
+/* Numérotation automatique des projets (n°1, n°2...) */
+#liste-projets {
+    counter-reset: numero-projet;
+}
+
+#liste-projets .projet {
+    counter-increment: numero-projet;
+}
+
+#liste-projets .projet-titre::after {
+    content: " n°" counter(numero-projet);
+}
+
+.projet-champs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 16px;
+}
+
+.projet-champs .champ {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* La description prend toute la largeur */
+.champ-large {
+    grid-column: 1 / -1;
+}
+
+.projet-champs input,
+.projet-champs select,
+.projet-champs textarea {
+    background: #ffffff;
+}
+
+.btn-ajouter {
+    padding: 10px 20px;
+    color: var(--couleur-principale);
+    background: #eff6ff;
+    border: 1px dashed var(--couleur-principale);
+}
+
+.btn-ajouter:hover {
+    background: #dbeafe;
+}
+
+/* ---------- Boutons Envoyer / Effacer ---------- */
+.boutons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 30px;
+}
+
+.btn {
+    padding: 12px 34px;
+    font: inherit;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+/* Le lien MODIFIER est affiché comme un bouton */
+a.btn {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+}
+
+/* Formulaire du bouton VALIDER : sans marge */
+.boutons form {
+    margin: 0;
+}
+
+/* ---------- Messages ---------- */
+/* Confirmation après VALIDER */
+.message {
+    margin: 0 0 24px;
+    padding: 14px 18px;
+    text-align: center;
+    font-weight: 600;
+    color: #166534;
+    background: #dcfce7;
+    border: 1px solid #86efac;
+    border-radius: var(--rayon);
+}
+
+/* Message général d'erreurs */
+.message-erreur {
+    margin: 0 0 24px;
+    padding: 14px 18px;
+    text-align: center;
+    font-weight: 600;
+    color: #991b1b;
+    background: #fee2e2;
+    border: 1px solid #fca5a5;
+    border-radius: var(--rayon);
+}
+
+/* Message d'erreur sous un champ */
+.erreur {
+    margin: 2px 0 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #dc2626;
+}
+
+.obligatoire {
+    color: #dc2626;
+}
+
+.info {
+    margin: 4px 0 0;
+    font-size: 0.85rem;
+    color: var(--couleur-texte-doux);
+}
+
+.btn-principal {
+    color: #ffffff;
+    background: var(--couleur-principale);
+    border: 1px solid var(--couleur-principale);
+}
+
+.btn-principal:hover {
+    background: var(--couleur-principale-fonce);
+}
+
+.btn-secondaire {
+    color: var(--couleur-texte);
+    background: #ffffff;
+    border: 1px solid var(--couleur-bordure);
+}
+
+.btn-secondaire:hover {
+    background: #e2e8f0;
+}
+
+.conteneur > .info {
+    margin: 0 0 16px;
+    text-align: center;
+}
+
+/* ---------- Tableaux du récapitulatif ---------- */
+.recap {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.recap th,
+.recap td {
+    padding: 10px 8px;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.recap tr:last-child th,
+.recap tr:last-child td {
+    border-bottom: none;
+}
+
+.recap th {
+    width: 40%;
+    font-weight: 600;
+    color: var(--couleur-texte-doux);
+}
+
+.recap td {
+    word-break: break-word;     /* coupe les longs textes (email...) */
+}
+
+.recap a {
+    color: var(--couleur-principale);
+    font-weight: 600;
+}
+
+.recap a:hover {
+    color: var(--couleur-principale-fonce);
+}
+
+.vide {
+    color: var(--couleur-texte-doux);
+    font-style: italic;
+}
+
+/* ---------- Responsive : tablette et mobile ---------- */
+@media (max-width: 800px) {
+    /* Blocs les uns sous les autres */
+    .grille {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "personnel"
+            "academique"
+            "remarques"
+            "projets"
+            "interets"
+            "competences";
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .boutons {
+        flex-direction: column;
+    }
+
+    .btn,
+    .boutons form {
+        width: 100%;
+    }
+
+    /* Champs d'un projet sur une colonne */
+    .projet-champs {
+        grid-template-columns: 1fr;
+    }
+
+    .recap th {
+        width: 45%;
+    }
+}
