@@ -50,7 +50,10 @@ function chargerEnv($chemin)
 chargerEnv(__DIR__ . '/.env');
 
 // Adresse du site, pour construire le lien de validation envoyé par email
-$url_site = 'http://localhost/TP1-CV/partie2';
+// Adresse du site, calculée automatiquement (reste correcte si le dossier est renommé)
+$protocole = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$dossiers  = explode('/', dirname($_SERVER['SCRIPT_NAME']));
+$url_site  = $protocole . '://' . $_SERVER['HTTP_HOST'] . implode('/', array_map('rawurlencode', $dossiers));
 
 // ---------- Listes de choix (formulaire + vérification côté serveur) ----------
 $types_experience   = ['Stage', 'Formation'];
