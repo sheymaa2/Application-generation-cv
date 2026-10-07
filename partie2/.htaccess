@@ -1,0 +1,6 @@
+# .htaccess : règles lues par Apache pour ce dossier.
+# Interdit l'accès aux fichiers .env et .env.example depuis le navigateur :
+# le .env contient le mot de passe de la boîte mail, il ne doit jamais être téléchargeable.
+<FilesMatch "^\.env">
+    Require all denied
+</FilesMatch>
