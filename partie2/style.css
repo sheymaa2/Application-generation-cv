@@ -1,0 +1,1459 @@
+/* style.css : design de l'application de génération de CV (Partie 2)
+   Organisation : 1. variables  2. base  3. menu  4. titres  5. champs  6. boutons
+                  7. messages  8. pages connexion/inscription  9. formulaire du CV
+                  10. aperçu du CV  11. offres et candidatures  12. responsive */
+
+/* ========== 1. Variables (couleurs, rayons, ombres) ========== */
+:root {
+    --principale: #2563eb;
+    --principale-fonce: #1d4ed8;
+    --principale-clair: #eff6ff;
+    --principale-moyen: #dbeafe;
+    --nuit: #0f172a;                 /* bleu très foncé : colonne du CV, panneau de connexion */
+    --fond: #f4f6fb;
+    --carte: #ffffff;
+    --texte: #0f172a;
+    --texte-doux: #64748b;
+    --bordure: #e2e8f0;
+    --bordure-forte: #cbd5e1;
+    --vert: #16a34a;
+    --rouge: #dc2626;
+    --orange: #d97706;
+    --rayon: 14px;
+    --rayon-petit: 10px;
+    --ombre: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 16px rgba(15, 23, 42, 0.06);
+    --ombre-forte: 0 10px 30px rgba(15, 23, 42, 0.12);
+    --police-titre: "Poppins", "Segoe UI", sans-serif;
+    --police: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* ========== 2. Base ========== */
+* {
+    box-sizing: border-box;
+}
+
+/* L'attribut hidden doit toujours cacher, même si une classe met display: flex */
+[hidden] {
+    display: none !important;
+}
+
+html {
+    scroll-behavior: smooth;          /* défilement doux vers les ancres du sommaire */
+    scroll-padding-top: 90px;         /* l'ancre ne se cache pas sous le menu fixe */
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--police);
+    font-size: 15px;
+    background: var(--fond);
+    color: var(--texte);
+    line-height: 1.55;
+}
+
+main {
+    flex: 1;                          /* le contenu occupe toute la hauteur de l'écran */
+}
+
+.conteneur {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 36px 20px 60px;
+}
+
+a {
+    color: var(--principale);
+    font-weight: 500;
+}
+
+h1, h2, h3, h4 {
+    font-family: var(--police-titre);
+    line-height: 1.25;
+}
+
+.icone {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    vertical-align: -3px;
+}
+
+.centre {
+    text-align: center;
+}
+
+.vide {
+    color: var(--texte-doux);
+    font-style: italic;
+}
+
+/* ========== 3. Menu du haut ========== */
+.menu {
+    position: sticky;                 /* le menu reste visible quand on descend */
+    top: 0;
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 28px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--bordure);
+}
+
+.menu-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--texte);
+    font-family: var(--police-titre);
+    font-size: 1.05rem;
+    text-decoration: none;
+}
+
+.logo-carre {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--principale), #7c3aed);
+    border-radius: 10px;
+}
+
+.menu-liens {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+}
+
+.menu-liens a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px;
+    color: var(--texte-doux);
+    font-weight: 600;
+    font-size: 0.92rem;
+    text-decoration: none;
+    border-radius: 999px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.menu-liens a:hover {
+    color: var(--principale);
+    background: var(--principale-clair);
+}
+
+.menu-liens a.actif {
+    color: var(--principale);
+    background: var(--principale-moyen);
+}
+
+.menu-compte {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 220px;
+    margin-left: 10px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    color: var(--texte-doux);
+    background: var(--fond);
+    border-radius: 999px;
+}
+
+.menu-compte span {
+    overflow: hidden;
+    text-overflow: ellipsis;          /* email trop long : coupé avec « ... » */
+    white-space: nowrap;
+}
+
+.menu-liens a.menu-sortie:hover {
+    color: var(--rouge);
+    background: #fef2f2;
+}
+
+/* ========== 4. Titres de page et cartes ========== */
+.titre-page {
+    margin-bottom: 28px;
+}
+
+.titre-page h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.titre-page p {
+    margin: 6px 0 0;
+    color: var(--texte-doux);
+}
+
+.titre-section {
+    margin: 0 0 14px;
+    font-size: 1.15rem;
+}
+
+.carte {
+    min-width: 0;                     /* évite que la carte déborde dans une grille */
+    padding: 26px;
+    background: var(--carte);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre);
+}
+
+.carte-centree {
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+/* ========== 5. Champs de formulaire ========== */
+.champ {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.champ label {
+    font-weight: 600;
+}
+
+.champ small,
+label small {
+    font-weight: 400;
+    color: var(--texte-doux);
+}
+
+/* Deux champs côte à côte */
+.champ-duo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 16px;
+}
+
+.titre-champ {
+    margin: 0 0 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="tel"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 11px 14px;
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--texte);
+    background: #ffffff;
+    border: 1px solid var(--bordure-forte);
+    border-radius: var(--rayon-petit);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #94a3b8;
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+    border-color: #94a3b8;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--principale);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+}
+
+input:disabled {
+    color: var(--texte-doux);
+    background: var(--fond);
+    border-style: dashed;
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* Champ avec une icône à gauche */
+.champ-icone {
+    position: relative;
+}
+
+.champ-icone .icone {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    pointer-events: none;
+}
+
+.champ-icone input {
+    padding-left: 40px;
+}
+
+/* Champ caché mais toujours utilisable (le navigateur peut afficher « champ obligatoire ») */
+.champ-cache {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.obligatoire {
+    color: var(--rouge);
+}
+
+.erreur {
+    display: flex;
+    gap: 6px;
+    margin: 2px 0 0;
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: var(--rouge);
+}
+
+.erreur::before {
+    content: "⚠";
+}
+
+.info {
+    margin: 4px 0;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--texte-doux);
+}
+
+/* ========== 6. Boutons ========== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-radius: var(--rayon-petit);
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn-petit {
+    padding: 8px 14px;
+    font-size: 0.87rem;
+}
+
+.btn-bloc {
+    width: 100%;
+    margin-top: 6px;
+}
+
+.btn-principal {
+    color: #ffffff;
+    background: var(--principale);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.btn-principal:hover {
+    background: var(--principale-fonce);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+}
+
+.btn-secondaire {
+    color: var(--texte);
+    background: #ffffff;
+    border-color: var(--bordure-forte);
+}
+
+.btn-secondaire:hover {
+    background: var(--fond);
+}
+
+.btn-succes {
+    color: #ffffff;
+    background: var(--vert);
+}
+
+.btn-succes:hover {
+    background: #15803d;
+}
+
+.btn-danger {
+    color: var(--rouge);
+    background: #ffffff;
+    border-color: #fecaca;
+}
+
+.btn-danger:hover {
+    background: #fef2f2;
+}
+
+.btn-lien {
+    color: var(--texte-doux);
+    background: none;
+    text-decoration: underline;
+}
+
+.btn-ajouter {
+    width: 100%;
+    padding: 12px;
+    color: var(--principale);
+    background: var(--principale-clair);
+    border: 1.5px dashed #93c5fd;
+}
+
+.btn-ajouter:hover {
+    background: var(--principale-moyen);
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.actions form {
+    margin: 0;
+}
+
+/* ========== 7. Messages et pastilles ========== */
+.alerte {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 0 0 22px;
+    padding: 14px 18px;
+    font-weight: 500;
+    border: 1px solid;
+    border-radius: var(--rayon-petit);
+}
+
+.alerte p {
+    margin: 0;
+}
+
+.alerte .icone {
+    margin-top: 2px;
+}
+
+.alerte-succes { color: #166534; background: #f0fdf4; border-color: #bbf7d0; }
+.alerte-erreur { color: #991b1b; background: #fef2f2; border-color: #fecaca; }
+.alerte-info   { color: #1e3a8a; background: var(--principale-clair); border-color: #bfdbfe; text-align: left; }
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    font-family: var(--police);
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    border-radius: 999px;
+    vertical-align: middle;
+}
+
+.badge-vert   { color: #166534; background: #dcfce7; }
+.badge-rouge  { color: #991b1b; background: #fee2e2; }
+.badge-gris   { color: #475569; background: #e2e8f0; }
+.badge-orange { color: #92400e; background: #fef3c7; }
+.badge-bleu   { color: #1e40af; background: var(--principale-moyen); }
+.badge-violet { color: #6b21a8; background: #f3e8ff; }
+
+/* Message « page vide » centré, avec une grande icône ronde */
+.etat-vide {
+    text-align: center;
+}
+
+.etat-vide h2 {
+    margin: 14px 0 6px;
+    font-size: 1.25rem;
+}
+
+.etat-vide p {
+    margin: 0 0 18px;
+    color: var(--texte-doux);
+}
+
+.pastille-icone {
+    display: inline-grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    color: var(--principale);
+    background: var(--principale-clair);
+    border-radius: 50%;
+}
+
+.pastille-icone .icone {
+    width: 28px;
+    height: 28px;
+}
+
+.pastille-succes { color: var(--vert); background: #dcfce7; }
+.pastille-erreur { color: var(--rouge); background: #fee2e2; }
+
+/* ========== 8. Pages connexion / inscription ========== */
+.conteneur-auth {
+    display: flex;
+    align-items: center;
+    max-width: 1040px;
+}
+
+.auth {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    overflow: hidden;
+    background: var(--carte);
+    border-radius: 22px;
+    box-shadow: var(--ombre-forte);
+}
+
+.auth-presentation {
+    padding: 52px 44px;
+    color: #e2e8f0;
+    background:
+        radial-gradient(circle at 15% 15%, rgba(124, 58, 237, 0.55), transparent 45%),
+        radial-gradient(circle at 90% 90%, rgba(37, 99, 235, 0.7), transparent 50%),
+        var(--nuit);
+}
+
+.auth-presentation h2 {
+    margin: 0 0 14px;
+    font-size: 2rem;
+    color: #ffffff;
+}
+
+.auth-presentation ul {
+    margin: 34px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.auth-presentation li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    font-weight: 500;
+}
+
+.auth-presentation li .icone {
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+}
+
+.auth-carte {
+    padding: 44px;
+}
+
+.auth-carte > h2 {
+    margin: 0;
+    font-size: 1.6rem;
+}
+
+.auth-carte > .info {
+    margin-bottom: 22px;
+}
+
+/* Carte seule au centre (page de validation) */
+.carte-seule {
+    max-width: 460px;
+    margin: 0 auto;
+    background: var(--carte);
+    border-radius: 22px;
+    box-shadow: var(--ombre-forte);
+}
+
+/* Choix Étudiant / Entreprise sous forme de cartes */
+.choix-cartes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.carte-choix {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 16px;
+    border: 1.5px solid var(--bordure-forte);
+    border-radius: var(--rayon-petit);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.carte-choix:hover {
+    border-color: var(--principale);
+}
+
+.carte-choix .icone {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 6px;
+    color: var(--principale);
+}
+
+.carte-choix span {
+    font-size: 0.83rem;
+    color: var(--texte-doux);
+}
+
+.carte-choix input {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    accent-color: var(--principale);
+}
+
+/* :has() : la carte dont le bouton radio est coché est mise en valeur */
+.carte-choix:has(input:checked) {
+    border-color: var(--principale);
+    background: var(--principale-clair);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* ========== 9. Formulaire du CV ========== */
+/* Sommaire en haut : pastilles cliquables */
+.sommaire {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.sommaire a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px 7px 7px;
+    font-size: 0.87rem;
+    font-weight: 600;
+    color: var(--texte);
+    text-decoration: none;
+    background: var(--carte);
+    border: 1px solid var(--bordure);
+    border-radius: 999px;
+}
+
+.sommaire a:hover {
+    border-color: var(--principale);
+    color: var(--principale);
+}
+
+.sommaire span {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    font-size: 0.78rem;
+    color: #ffffff;
+    background: var(--principale);
+    border-radius: 50%;
+}
+
+.grille-cv {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    align-items: start;
+}
+
+.bloc-large {
+    grid-column: 1 / -1;
+}
+
+/* En-tête de section : numéro rond + titre + aide */
+.section-entete {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 22px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--bordure);
+}
+
+.section-numero {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    font-family: var(--police-titre);
+    font-weight: 700;
+    color: var(--principale);
+    background: var(--principale-clair);
+    border-radius: 10px;
+}
+
+.section-entete h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.section-entete h2 .icone {
+    color: var(--principale);
+}
+
+.section-entete p {
+    margin: 2px 0 0;
+    font-size: 0.87rem;
+    color: var(--texte-doux);
+}
+
+/* Une ligne « stage ou formation » : petite carte grise */
+.carte-ligne {
+    position: relative;
+    margin-bottom: 14px;
+    padding: 20px 20px 4px;
+    background: #f8fafc;
+    border: 1px solid var(--bordure);
+    border-left: 4px solid var(--principale);
+    border-radius: var(--rayon-petit);
+}
+
+.grille-champs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 16px;
+    padding-right: 34px;              /* place pour le bouton ✕ */
+}
+
+.champ-large {
+    grid-column: 1 / -1;
+}
+
+/* Ligne simple : champ texte + liste + bouton ✕ */
+.ligne-simple {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.ligne-simple select {
+    width: auto;
+    min-width: 150px;
+}
+
+.liste-colonnes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    column-gap: 14px;
+}
+
+.btn-retirer {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 42px;
+    color: #94a3b8;
+    background: #ffffff;
+    border: 1px solid var(--bordure-forte);
+    border-radius: var(--rayon-petit);
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s, border-color 0.2s;
+}
+
+.btn-retirer:hover {
+    color: var(--rouge);
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+.carte-ligne > .btn-retirer {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+}
+
+/* Zone de la photo : grande zone cliquable avec aperçu */
+.zone-photo {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 18px;
+    border: 2px dashed var(--bordure-forte);
+    border-radius: var(--rayon);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.zone-photo:hover {
+    border-color: var(--principale);
+    background: var(--principale-clair);
+}
+
+.zone-photo img,
+.zone-photo-vide {
+    flex-shrink: 0;
+    width: 110px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: var(--rayon-petit);
+}
+
+.zone-photo-vide {
+    display: grid;
+    place-items: center;
+    color: #94a3b8;
+    background: var(--fond);
+}
+
+.zone-photo-vide .icone {
+    width: 36px;
+    height: 36px;
+}
+
+.zone-photo-texte {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.85rem;
+    color: var(--texte-doux);
+}
+
+.zone-photo-texte strong {
+    font-size: 1rem;
+    color: var(--principale);
+}
+
+/* Barre d'actions collée en bas de l'écran */
+.barre-actions {
+    position: sticky;
+    bottom: 16px;
+    z-index: 5;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 26px;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre-forte);
+}
+
+/* ========== 10. Aperçu du CV (présenté comme une feuille) ========== */
+.barre-outils {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.cv-document {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    max-width: 960px;
+    margin: 0 auto;
+    overflow: hidden;
+    background: var(--carte);
+    border-radius: 6px;
+    box-shadow: var(--ombre-forte);
+}
+
+.cv-cote {
+    padding: 34px 28px;
+    color: #cbd5e1;
+    background: var(--nuit);
+}
+
+.cv-photo {
+    display: block;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 10px;
+    object-fit: cover;
+    border: 4px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+}
+
+.cv-cote h3 {
+    margin: 26px 0 12px;
+    padding-bottom: 6px;
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.cv-contact {
+    display: flex;
+    gap: 10px;
+    margin: 0 0 10px;
+    font-size: 0.87rem;
+    word-break: break-word;
+}
+
+.cv-contact .icone {
+    width: 16px;
+    height: 16px;
+    margin-top: 3px;
+    color: #93c5fd;
+}
+
+/* Barre de niveau (compétences et langues) */
+.niveau {
+    margin-bottom: 12px;
+}
+
+.niveau p {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 5px;
+    font-size: 0.88rem;
+    color: #ffffff;
+}
+
+.niveau p span {
+    font-size: 0.78rem;
+    color: #94a3b8;
+}
+
+.barre {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+}
+
+.barre div {
+    height: 100%;
+    background: linear-gradient(90deg, #60a5fa, #a78bfa);
+    border-radius: 999px;
+}
+
+.etiquettes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.etiquettes span {
+    padding: 4px 11px;
+    font-size: 0.82rem;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+}
+
+.cv-principal {
+    padding: 44px 40px;
+}
+
+.cv-nom {
+    margin: 0 0 6px;
+    font-size: 2.3rem;
+    font-weight: 600;
+    color: var(--texte);
+}
+
+.cv-nom strong {
+    color: var(--principale);
+}
+
+.cv-principal h3 {
+    margin: 34px 0 20px;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--principale);
+}
+
+/* Frise chronologique : un trait vertical avec un point par expérience */
+.frise {
+    border-left: 2px solid var(--principale-moyen);
+}
+
+.frise-element {
+    position: relative;
+    padding: 0 0 26px 24px;
+}
+
+.frise-element::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: -7px;
+    width: 12px;
+    height: 12px;
+    background: var(--principale);
+    border: 3px solid #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--principale-moyen);
+}
+
+.frise-dates {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 4px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--texte-doux);
+}
+
+.frise-dates .icone {
+    width: 14px;
+    height: 14px;
+}
+
+.frise-element h4 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 4px;
+    font-size: 1.05rem;
+}
+
+.frise-lieu {
+    margin: 0 0 6px;
+    font-style: italic;
+    color: var(--texte-doux);
+}
+
+.frise-element p {
+    margin: 0 0 4px;
+}
+
+/* Liste de contrôle du CV incomplet */
+.liste-controle {
+    margin: 0 0 20px;
+    padding: 0;
+    list-style: none;
+}
+
+.liste-controle li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 0;
+    font-weight: 500;
+    border-bottom: 1px solid var(--bordure);
+}
+
+.liste-controle li.ok .icone     { color: var(--vert); }
+.liste-controle li.manque        { color: var(--texte-doux); }
+.liste-controle li.manque .icone { color: var(--rouge); }
+
+/* ========== 11. Offres et candidatures ========== */
+/* Cartes de statistiques */
+.statistiques {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 26px;
+}
+
+.stat {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 14px;
+    padding: 18px 20px;
+    background: var(--carte);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre);
+}
+
+.stat .icone {
+    grid-row: span 2;
+    width: 44px;
+    height: 44px;
+    padding: 11px;
+    color: var(--principale);
+    background: var(--principale-clair);
+    border-radius: 12px;
+}
+
+.stat strong {
+    font-family: var(--police-titre);
+    font-size: 1.6rem;
+    line-height: 1.1;
+}
+
+.stat span {
+    font-size: 0.85rem;
+    color: var(--texte-doux);
+}
+
+.stat-alerte .icone {
+    color: var(--orange);
+    background: #fef3c7;
+}
+
+/* Petites informations avec icône (lieu, durée, date...) */
+.puces {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    margin: 8px 0;
+    font-size: 0.85rem;
+    color: var(--texte-doux);
+}
+
+.puces span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.puces .icone {
+    width: 15px;
+    height: 15px;
+}
+
+/* Avatar rond (initiale de l'entreprise) */
+.avatar {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    font-family: var(--police-titre);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--principale), #7c3aed);
+    border-radius: 12px;
+}
+
+.avatar-grand {
+    width: 72px;
+    height: 72px;
+    color: #94a3b8;
+    background: var(--fond);
+}
+
+/* Offres côté étudiant : grille de cartes */
+.grille-offres {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 20px;
+}
+
+.offre {
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.offre:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--ombre-forte);
+}
+
+.offre-entete {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.offre-entete h3 {
+    margin: 0;
+    font-size: 1.08rem;
+}
+
+.offre-entete .info {
+    margin: 0;
+}
+
+.offre-description {
+    flex: 1;
+    margin: 6px 0 16px;
+    color: #334155;
+}
+
+.offre-statut {
+    margin: 0;
+    padding-top: 14px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-top: 1px solid var(--bordure);
+}
+
+/* <details> : le formulaire de candidature s'ouvre sous le bouton */
+.postuler summary {
+    list-style: none;                 /* enlève le petit triangle */
+    width: fit-content;
+}
+
+.postuler summary::-webkit-details-marker {
+    display: none;
+}
+
+.postuler[open] summary {
+    margin-bottom: 14px;
+    color: var(--principale);
+    background: var(--principale-clair);
+    box-shadow: none;
+}
+
+/* Espace entreprise */
+.grille-entreprise {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.offre-ligne {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+    padding: 20px 22px;
+}
+
+.offre-ligne h3 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+.offre-compteur {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.offre-fermee {
+    opacity: 0.65;
+}
+
+.offre-ligne .actions {
+    flex-shrink: 0;
+}
+
+/* Liste des candidats d'une offre */
+.lien-retour {
+    margin: -14px 0 20px;
+}
+
+.lien-retour a {
+    text-decoration: none;
+}
+
+.liste-candidats {
+    display: grid;
+    gap: 16px;
+}
+
+.candidat {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.candidat-photo {
+    flex-shrink: 0;
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.candidat-infos {
+    flex: 1;
+    min-width: 0;
+}
+
+.candidat-infos h3 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.motivation {
+    margin: 10px 0 0;
+    padding: 10px 14px;
+    font-style: italic;
+    color: #334155;
+    background: var(--fond);
+    border-left: 3px solid var(--principale-moyen);
+    border-radius: 0 8px 8px 0;
+}
+
+.candidat-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.form-statut {
+    display: flex;
+    gap: 8px;
+    margin: 0;
+}
+
+/* ========== 12. Responsive : tablette et mobile ========== */
+@media (max-width: 900px) {
+    .auth {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-presentation {
+        padding: 32px 28px;
+    }
+
+    .auth-presentation h2 {
+        font-size: 1.5rem;
+    }
+
+    .auth-presentation ul {
+        display: none;                /* sur petit écran, on garde seulement le titre */
+    }
+
+    .grille-cv,
+    .grille-entreprise,
+    .cv-document {
+        grid-template-columns: 1fr;
+    }
+
+    .candidat {
+        flex-wrap: wrap;
+    }
+
+    .candidat-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        font-size: 14px;
+    }
+
+    .conteneur {
+        padding: 24px 14px 40px;
+    }
+
+    .titre-page h1 {
+        font-size: 1.6rem;
+    }
+
+    .menu {
+        padding: 10px 14px;
+    }
+
+    /* Menu : on garde les icônes, on cache le texte et l'email */
+    .menu-liens a span,
+    .menu-compte {
+        display: none;
+    }
+
+    .carte,
+    .auth-carte {
+        padding: 20px;
+    }
+
+    .champ-duo,
+    .grille-champs,
+    .choix-cartes {
+        grid-template-columns: 1fr;
+    }
+
+    .grille-champs {
+        padding-right: 0;
+        padding-top: 28px;
+    }
+
+    .ligne-simple {
+        flex-wrap: wrap;
+    }
+
+    .ligne-simple input {
+        flex: 1 1 100%;
+    }
+
+    .ligne-simple select {
+        flex: 1;
+    }
+
+    .grille-offres {
+        grid-template-columns: 1fr;
+    }
+
+    .offre-ligne {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .barre-actions,
+    .barre-outils {
+        flex-direction: column-reverse;
+    }
+
+    .barre-actions .btn,
+    .barre-outils .btn {
+        width: 100%;
+    }
+
+    .cv-principal {
+        padding: 28px 22px;
+    }
+
+    .cv-nom {
+        font-size: 1.8rem;
+    }
+
+    .zone-photo {
+        flex-direction: column;
+        text-align: center;
+    }
+}
